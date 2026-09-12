@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import './Auth.css'
+import '../styles/Auth.css'
 
 const Signup = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirm: '' })

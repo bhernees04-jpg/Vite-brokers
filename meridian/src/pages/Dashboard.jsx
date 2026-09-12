@@ -3,7 +3,7 @@ import Header from '../components/Header'
 import PortfolioCard from '../components/PortfolioCard'
 import MarketTicker from '../components/MarketTicker'
 import Chart from '../components/Chart'
-import './Dashboard.css'
+import '../styles/Dashboard.css'
 
 const Dashboard = () => {
   const [chartData, setChartData] = useState([

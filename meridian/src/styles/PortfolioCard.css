@@ -1,0 +1,53 @@
+.portfolio-card {
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--primary-indigo-light) 100%);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent-brass);
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.portfolio-card:hover {
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
+  transform: translateY(-2px);
+}
+
+.card-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Georgia', serif;
+}
+
+.card-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--accent-brass);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+}
+
+.card-change {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+}
+
+.card-change.positive {
+  color: var(--success-teal);
+}
+
+.card-change.negative {
+  color: var(--loss-coral);
+}
+
+.change-indicator {
+  font-size: 10px;
+}

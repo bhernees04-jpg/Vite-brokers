@@ -1,0 +1,62 @@
+:root {
+  /* Meridian Color Palette */
+  --primary-indigo: #1a1a3e;
+  --primary-indigo-light: #2d2d5f;
+  --accent-brass: #d4af37;
+  --accent-brass-dark: #b8941e;
+  --success-teal: #2d9d9e;
+  --loss-coral: #e07856;
+  --text-primary: #f5f5f5;
+  --text-secondary: #b0b0b0;
+  --bg-dark: #0f0f1e;
+  --bg-card: #1a1a3e;
+  --border-color: #333355;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Georgia', serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+code, .ticker {
+  font-family: 'Courier New', monospace;
+}
+
+a {
+  color: var(--accent-brass);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #e6c547;
+}
+
+button {
+  font-family: 'Georgia', serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+input, select {
+  font-family: 'Georgia', serif;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 10px 15px;
+  border-radius: 4px;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--accent-brass);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+}
