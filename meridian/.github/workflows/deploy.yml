@@ -16,27 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: 'meridian/package-lock.json'
-          
-      - name: Install dependencies
-        run: |
-          cd meridian
-          npm install
-          
-      - name: Build project
-        run: |
-          cd meridian
-          npm run build
-          
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./meridian/dist
+          publish_dir: ./
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
