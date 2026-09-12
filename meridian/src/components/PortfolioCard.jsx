@@ -1,4 +1,4 @@
-import './PortfolioCard.css'
+import '../styles/PortfolioCard.css'
 
 const PortfolioCard = ({ label, value, change, prefix = '$', isTeal = true }) => {
   const isPositive = change >= 0

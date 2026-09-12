@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import './MarketTicker.css'
+import '../styles/MarketTicker.css'
 
 const MarketTicker = () => {
   const [tickers, setTickers] = useState([

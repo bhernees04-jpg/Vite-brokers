@@ -1,5 +1,5 @@
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import './Chart.css'
+import '../styles/Chart.css'
 
 const Chart = ({ type = 'line', data }) => {
   return (

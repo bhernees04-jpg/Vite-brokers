@@ -1,1 +1,26 @@
-import React from 'react'\nimport ReactDOM from 'react-dom/client'\nimport { BrowserRouter as Router, Routes, Route } from 'react-router-dom'\nimport './styles/index.css'\nimport Login from './pages/Login'\nimport Signup from './pages/Signup'\nimport Dashboard from './pages/Dashboard'\nimport ProtectedRoute from './components/ProtectedRoute'\n\nfunction App() {\n  return (\n    <Router>\n      <Routes>\n        <Route path=\"/\" element={<Login />} />\n        <Route path=\"/signup\" element={<Signup />} />\n        <Route path=\"/dashboard\" element={<ProtectedRoute component={Dashboard} />} />\n      </Routes>\n    </Router>\n  )\n}\n\nReactDOM.createRoot(document.getElementById('root')).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n)\n
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import './index.css'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
+import Dashboard from './pages/Dashboard'
+import ProtectedRoute from './components/ProtectedRoute'
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<ProtectedRoute component={Dashboard} />} />
+      </Routes>
+    </Router>
+  )
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
