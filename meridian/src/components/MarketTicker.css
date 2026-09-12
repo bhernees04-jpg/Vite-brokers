@@ -1,0 +1,81 @@
+.market-ticker {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-top: 2px solid var(--accent-brass);
+  border-radius: 8px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.ticker-header {
+  padding: 12px 20px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-brass);
+  border-bottom: 1px solid var(--border-color);
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
+}
+
+.ticker-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 15px 20px;
+  scroll-behavior: smooth;
+}
+
+.ticker-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.ticker-scroll::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+.ticker-scroll::-webkit-scrollbar-thumb {
+  background: var(--accent-brass);
+  border-radius: 2px;
+}
+
+.ticker-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+  padding: 10px 15px;
+  background: rgba(212, 175, 55, 0.05);
+  border-radius: 4px;
+  border-left: 2px solid var(--accent-brass);
+}
+
+.ticker-symbol {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--accent-brass);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+}
+
+.ticker-price {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--text-primary);
+  font-family: 'Courier New', monospace;
+}
+
+.ticker-change {
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.ticker-change.positive {
+  color: var(--success-teal);
+}
+
+.ticker-change.negative {
+  color: var(--loss-coral);
+}
