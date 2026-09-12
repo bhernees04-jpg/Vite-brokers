@@ -1,1 +1,16 @@
-{\n  \"buildCommand\": \"npm run build\",\n  \"outputDirectory\": \"dist\",\n  \"framework\": \"react\",\n  \"nodeVersion\": \"18\"\n}\n
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "nodeVersion": "18.x",
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "routes": [
+    {
+      "src": "/.*",
+      "dest": "/index.html",
+      "status": 200
+    }
+  ]
+}
