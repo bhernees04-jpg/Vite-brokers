@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meridian — Trade crypto, FX, stocks & commodities</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="landing-nav">
+  <div class="brand"><span class="mark"></span> Meridian</div>
+  <div class="links">
+    <a href="#markets-preview">Markets</a>
+    <a href="#regions">Coverage</a>
+    <a href="/login.html">Sign in</a>
+    <a href="/register.html" class="btn btn-primary btn-sm">Open account</a>
+  </div>
+</div>
+
+<section class="hero">
+  <h1>One account. Every market, wherever you trade from.</h1>
+  <p class="lede">
+    Meridian lets you hold crypto, FX, equities, gold, crude oil and other commodities
+    in a single portfolio — built for traders across Europe, South America, Asia and
+    the Americas, in the currency you already think in.
+  </p>
+  <div class="hero-ctas">
+    <a href="/register.html" class="btn btn-primary">Open a demo account</a>
+    <a href="/login.html" class="btn btn-secondary">Sign in</a>
+  </div>
+</section>
+
+<div class="ticker-strip" id="markets-preview">
+  <div class="ticker-track" id="ticker-track">
+    <span class="ticker-item">Loading markets…</span>
+  </div>
+</div>
+
+<section class="asset-classes">
+  <div class="asset-card">
+    <h3>Crypto</h3>
+    <p>Bitcoin, Ethereum, Solana and the majors, quoted around the clock — no market open or close.</p>
+  </div>
+  <div class="asset-card">
+    <h3>FX</h3>
+    <p>Majors and regional pairs — EUR, GBP, JPY, BRL, MXN, CNH — sized for cross-border traders.</p>
+  </div>
+  <div class="asset-card">
+    <h3>Stocks</h3>
+    <p>Names from New York, Frankfurt, Amsterdam, São Paulo, Tokyo, Hong Kong and Seoul in one watchlist.</p>
+  </div>
+  <div class="asset-card">
+    <h3>Gold, oil &amp; commodities</h3>
+    <p>Gold and silver, WTI and Brent crude, natural gas and copper — the hedges alongside the risk.</p>
+  </div>
+</section>
+
+<section class="region-band" id="regions">
+  <h2>Built around four time zones, not one.</h2>
+  <div class="region-list">
+    <div>
+      <div class="r-name">EUROPE</div>
+      <div class="r-detail">EUR &amp; GBP pairs, Frankfurt and Amsterdam listings, Brent crude.</div>
+    </div>
+    <div>
+      <div class="r-name">SOUTH AMERICA</div>
+      <div class="r-detail">BRL &amp; MXN pairs, São Paulo listings, copper.</div>
+    </div>
+    <div>
+      <div class="r-name">ASIA</div>
+      <div class="r-detail">JPY, CNH &amp; AUD pairs, Tokyo, Hong Kong and Seoul listings.</div>
+    </div>
+    <div>
+      <div class="r-name">AMERICAS</div>
+      <div class="r-detail">USD &amp; CAD accounts, US large caps, WTI crude and natural gas.</div>
+    </div>
+  </div>
+</section>
+
+<section class="disclaimer-band">
+  This site is a product demonstration. Prices are simulated for illustration and do not
+  reflect real markets; no real funds, securities or currency are transacted. Meridian is
+  not a licensed broker-dealer, FX dealer, or money transmitter in any jurisdiction.
+</section>
+
+<div class="landing-footer">
+  <span>© 2026 Meridian — demo build</span>
+  <span>Not a real brokerage. For demonstration purposes only.</span>
+</div>
+
+<script src="/js/app.js"></script>
+<script>
+  async function loadTicker() {
+    try {
+      const { markets } = await api('/api/markets');
+      const track = document.getElementById('ticker-track');
+      const row = markets
+        .map(
+          (m) => `<span class="ticker-item"><span class="sym">${m.symbol}</span>${fmtPrice(m.price)} <span class="${m.changePct >= 0 ? 'up' : 'down'}">${fmtPct(m.changePct)}</span></span>`
+        )
+        .join('');
+      track.innerHTML = row + row; // duplicate for seamless scroll
+    } catch (e) {
+      // Landing ticker is decorative; fail quietly.
+    }
+  }
+  loadTicker();
+  setInterval(loadTicker, 4000);
+</script>
+</body>
+</html>

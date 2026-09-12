@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Open an account — Meridian</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<div class="auth-shell">
+  <div class="auth-visual">
+    <div class="brand"><span class="mark"></span> Meridian</div>
+    <div class="meridian-quote">
+      Crypto, FX, equities <span>and</span> gold, oil and commodities — one account, one login.
+    </div>
+    <div class="region-chips">
+      <span class="region-chip">EUR</span>
+      <span class="region-chip">BRL</span>
+      <span class="region-chip">JPY</span>
+      <span class="region-chip">USD</span>
+    </div>
+  </div>
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <h1>Open a demo account</h1>
+      <div class="sub">Simulated funds, real order flow — no real money moves.</div>
+      <div class="error-banner" id="error-banner"></div>
+      <form id="register-form">
+        <div class="field">
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" required autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" required minlength="8" autocomplete="new-password" />
+        </div>
+        <div class="field">
+          <label for="region">Region</label>
+          <select id="region" required>
+            <option value="Europe">Europe</option>
+            <option value="South America">South America</option>
+            <option value="Asia">Asia</option>
+            <option value="Americas">Americas</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="baseCurrency">Account currency</label>
+          <select id="baseCurrency" required>
+            <option value="USD">USD — US Dollar</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="BRL">BRL — Brazilian Real</option>
+            <option value="JPY">JPY — Japanese Yen</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Create account</button>
+      </form>
+      <div class="auth-foot">Already have an account? <a href="/login.html">Sign in</a></div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/app.js"></script>
+<script>
+  const regionToCurrency = { Europe: 'EUR', 'South America': 'BRL', Asia: 'JPY', Americas: 'USD' };
+  document.getElementById('region').addEventListener('change', (e) => {
+    document.getElementById('baseCurrency').value = regionToCurrency[e.target.value] || 'USD';
+  });
+
+  document.getElementById('register-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const banner = document.getElementById('error-banner');
+    banner.classList.remove('show');
+    try {
+      await api('/api/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          fullName: document.getElementById('fullName').value,
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value,
+          region: document.getElementById('region').value,
+          baseCurrency: document.getElementById('baseCurrency').value,
+        }),
+      });
+      window.location.href = '/dashboard.html';
+    } catch (err) {
+      banner.textContent = err.message;
+      banner.classList.add('show');
+    }
+  });
+</script>
+</body>
+</html>

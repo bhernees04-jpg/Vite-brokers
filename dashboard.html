@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard — Meridian</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar-mount"></aside>
+  <main class="main">
+    <div class="topline">
+      <div>
+        <h1>Dashboard</h1>
+        <div class="sub" id="welcome-line">&nbsp;</div>
+      </div>
+      <a href="/markets.html" class="btn btn-primary">Trade now</a>
+    </div>
+
+    <div class="stat-grid" id="stat-grid">
+      <div class="stat-card"><div class="stat-label">Total equity</div><div class="stat-value">—</div></div>
+      <div class="stat-card"><div class="stat-label">Cash balance</div><div class="stat-value">—</div></div>
+      <div class="stat-card"><div class="stat-label">Holdings value</div><div class="stat-value">—</div></div>
+      <div class="stat-card"><div class="stat-label">Open positions</div><div class="stat-value">—</div></div>
+    </div>
+
+    <div class="section-head"><h2>Market snapshot</h2><a href="/markets.html" class="mono" style="font-size:13px;color:var(--accent);">View all →</a></div>
+    <div class="card">
+      <table class="market-table" id="snapshot-table">
+        <thead><tr><th>Symbol</th><th>Category</th><th>Price</th><th>24h</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="section-head"><h2>Recent orders</h2><a href="/portfolio.html" class="mono" style="font-size:13px;color:var(--accent);">Full history →</a></div>
+    <div class="card" id="orders-card">
+      <div class="empty-state"><h3>No orders yet</h3><p>Head to Markets to place your first trade.</p></div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/app.js"></script>
+<script>
+  (async function init() {
+    const user = await renderShell('/dashboard.html');
+    if (!user) return;
+    document.getElementById('welcome-line').textContent = `${user.region} · ${user.baseCurrency} account`;
+
+    const [portfolio, marketsRes, ordersRes] = await Promise.all([
+      api('/api/portfolio'),
+      api('/api/markets'),
+      api('/api/orders'),
+    ]);
+
+    const cur = portfolio.baseCurrency;
+    const grid = document.getElementById('stat-grid');
+    grid.innerHTML = `
+      <div class="stat-card"><div class="stat-label">Total equity</div><div class="stat-value">${fmtMoney(portfolio.totalEquity, cur)}</div></div>
+      <div class="stat-card"><div class="stat-label">Cash balance</div><div class="stat-value">${fmtMoney(portfolio.cashBalance, cur)}</div></div>
+      <div class="stat-card"><div class="stat-label">Holdings value</div><div class="stat-value">${fmtMoney(portfolio.holdingsValue, cur)}</div></div>
+      <div class="stat-card"><div class="stat-label">Open positions</div><div class="stat-value">${portfolio.holdings.length}</div></div>
+    `;
+
+    const picks = marketsRes.markets.filter((m) =>
+      ['BTC-USD', 'EUR/USD', 'AAPL', 'XAU/USD', 'WTI', 'VALE'].includes(m.symbol)
+    );
+    const tbody = document.querySelector('#snapshot-table tbody');
+    tbody.innerHTML = picks
+      .map(
+        (m) => `
+      <tr onclick="window.location.href='/trade.html?symbol=${encodeURIComponent(m.symbol)}'">
+        <td class="sym">${m.symbol}<div class="region-tag">${m.name}</div></td>
+        <td><span class="pill pill-cat">${CATEGORY_LABELS[m.category]}</span></td>
+        <td class="mono">${fmtPrice(m.price)}</td>
+        <td class="mono ${m.changePct >= 0 ? 'up' : 'down'}">${fmtPct(m.changePct)}</td>
+      </tr>`
+      )
+      .join('');
+
+    if (ordersRes.orders.length) {
+      const rows = ordersRes.orders
+        .slice(0, 6)
+        .map(
+          (o) => `
+        <tr>
+          <td class="sym">${o.symbol}</td>
+          <td><span class="pill ${o.side === 'buy' ? 'up' : 'down'}">${o.side.toUpperCase()}</span></td>
+          <td class="mono">${o.quantity}</td>
+          <td class="mono">${fmtPrice(o.price)}</td>
+          <td class="mono">${fmtMoney(o.total, cur)}</td>
+          <td>${new Date(o.created_at).toLocaleString()}</td>
+        </tr>`
+        )
+        .join('');
+      document.getElementById('orders-card').innerHTML = `
+        <table class="market-table">
+          <thead><tr><th>Symbol</th><th>Side</th><th>Qty</th><th>Price</th><th>Total</th><th>When</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
+  })();
+</script>
+</body>
+</html>

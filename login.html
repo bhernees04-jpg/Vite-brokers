@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign in — Meridian</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<div class="auth-shell">
+  <div class="auth-visual">
+    <div class="brand"><span class="mark"></span> Meridian</div>
+    <div class="meridian-quote">
+      Markets don't wait for one time zone. <span>Neither do we.</span>
+    </div>
+    <div class="region-chips">
+      <span class="region-chip">Europe</span>
+      <span class="region-chip">South America</span>
+      <span class="region-chip">Asia</span>
+      <span class="region-chip">Americas</span>
+    </div>
+  </div>
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <h1>Welcome back</h1>
+      <div class="sub">Sign in to your Meridian account.</div>
+      <div class="error-banner" id="error-banner"></div>
+      <form id="login-form">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+      </form>
+      <div class="auth-foot">New to Meridian? <a href="/register.html">Open an account</a></div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/app.js"></script>
+<script>
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const banner = document.getElementById('error-banner');
+    banner.classList.remove('show');
+    try {
+      await api('/api/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value,
+        }),
+      });
+      window.location.href = '/dashboard.html';
+    } catch (err) {
+      banner.textContent = err.message;
+      banner.classList.add('show');
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portfolio — Meridian</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar-mount"></aside>
+  <main class="main">
+    <div class="topline">
+      <div>
+        <h1>Portfolio</h1>
+        <div class="sub" id="equity-line">&nbsp;</div>
+      </div>
+      <a href="/markets.html" class="btn btn-primary">Trade</a>
+    </div>
+
+    <div class="section-head"><h2>Holdings</h2></div>
+    <div class="card" id="holdings-card">
+      <div class="empty-state"><h3>No positions yet</h3><p>Trades you place will show up here.</p></div>
+    </div>
+
+    <div class="section-head"><h2>Order history</h2></div>
+    <div class="card" id="orders-card">
+      <div class="empty-state"><h3>No orders yet</h3></div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/app.js"></script>
+<script>
+  (async function init() {
+    const user = await renderShell('/portfolio.html');
+    if (!user) return;
+
+    const [portfolio, ordersRes] = await Promise.all([api('/api/portfolio'), api('/api/orders')]);
+    const cur = portfolio.baseCurrency;
+
+    document.getElementById('equity-line').textContent =
+      `Total equity ${fmtMoney(portfolio.totalEquity, cur)} · Cash ${fmtMoney(portfolio.cashBalance, cur)}`;
+
+    if (portfolio.holdings.length) {
+      const rows = portfolio.holdings
+        .map(
+          (h) => `
+        <tr onclick="window.location.href='/trade.html?symbol=${encodeURIComponent(h.symbol)}'">
+          <td class="sym">${h.symbol}<div class="region-tag">${h.name}</div></td>
+          <td class="mono">${h.quantity}</td>
+          <td class="mono">${fmtPrice(h.avgPrice)}</td>
+          <td class="mono">${fmtPrice(h.currentPrice)}</td>
+          <td class="mono">${fmtMoney(h.marketValue, cur)}</td>
+          <td class="mono ${h.pnl >= 0 ? 'up' : 'down'}">${fmtMoney(h.pnl, cur)} (${fmtPct(h.pnlPct)})</td>
+        </tr>`
+        )
+        .join('');
+      document.getElementById('holdings-card').innerHTML = `
+        <table class="market-table">
+          <thead><tr><th>Symbol</th><th>Qty</th><th>Avg price</th><th>Current</th><th>Value</th><th>P/L</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
+
+    if (ordersRes.orders.length) {
+      const rows = ordersRes.orders
+        .map(
+          (o) => `
+        <tr>
+          <td class="sym">${o.symbol}</td>
+          <td><span class="pill ${o.side === 'buy' ? 'up' : 'down'}">${o.side.toUpperCase()}</span></td>
+          <td class="mono">${o.quantity}</td>
+          <td class="mono">${fmtPrice(o.price)}</td>
+          <td class="mono">${fmtMoney(o.total, cur)}</td>
+          <td>${new Date(o.created_at).toLocaleString()}</td>
+        </tr>`
+        )
+        .join('');
+      document.getElementById('orders-card').innerHTML = `
+        <table class="market-table">
+          <thead><tr><th>Symbol</th><th>Side</th><th>Qty</th><th>Price</th><th>Total</th><th>When</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
+  })();
+</script>
+</body>
+</html>
